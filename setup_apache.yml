@@ -1,0 +1,41 @@
+---
+- name : This playbook is used to install packages on both RH annnd ubuntu
+  hosts : all
+  become : true
+  vars :
+    port : 81 
+  tasks :
+  - name : Install httpd packages
+    yum : 
+      name : httpd 
+      state : installed
+    when : ansible_os_family == "RedHat"
+    notify : Start httpd service 
+  
+  - name: Ensure the default Apache port is 8081
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^Listen '
+      insertafter: '^#Listen '
+      line: Listen {{ port }}
+    notify : restart httpd service
+  handlers :
+  - name : Start httpd service
+    service :
+      name : httpd
+      state : started
+    when : ansible_os_family == "RedHat"
+  - name : restart httpd service 
+    service :
+      name : httpd
+      state : restarted
+  - name : Install apache  packages
+    apt :
+      name : apache2
+      state : present 
+    when : ansible_os_family == "Debian" 
+  - name : Start apache service
+    service :
+      name : apache2
+      state : started  
+    when : ansible_os_family == "Debian"

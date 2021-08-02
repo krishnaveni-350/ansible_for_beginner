@@ -1,0 +1,17 @@
+---
+# tasks file for setup-apache
+- name : Install httpd packages
+  yum : 
+    name : httpd 
+    state : installed
+  when : ansible_os_family == "RedHat"
+  notify : Start httpd service 
+  
+- name: Ensure the default Apache port is 8081
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen '
+    insertafter: '^#Listen '
+    line: Listen {{ port }}
+  notify : restart httpd service
+

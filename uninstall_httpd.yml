@@ -1,0 +1,14 @@
+---
+- name: This playbook is for uninstalling packages
+  hosts: app
+  become: true
+  tasks:
+  - name : This is task is to stop httpd 
+    service : 
+      name : httpd
+      state : stopped
+  - name: This task to uninstall httpd package
+    yum:
+      name: httpd
+      state: removed
+

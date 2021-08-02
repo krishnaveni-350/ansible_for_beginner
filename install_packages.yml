@@ -1,0 +1,14 @@
+---
+- name: This playbook is for installing packages
+  hosts: app
+  become: true
+  tasks:
+  - name: This task to install git package
+    yum:
+      name: git
+      state: installed
+  #- name : This task to unistall git package
+   # yum: 
+     # name: git
+    #  state: removed
+        
